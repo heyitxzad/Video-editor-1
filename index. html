@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebCut - Online Video Editor</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">WebCut</div>
+            <div class="header-actions">
+                <button id="export-btn" class="btn-primary">Export Video</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Left Panel - Tools -->
+            <div class="left-panel">
+                <div class="tool-section">
+                    <h3>Media</h3>
+                    <button id="upload-video" class="tool-btn">
+                        <i class="fas fa-video"></i> Import Video
+                    </button>
+                    <button id="upload-audio" class="tool-btn">
+                        <i class="fas fa-music"></i> Import Audio
+                    </button>
+                    <input type="file" id="video-input" accept="video/*" style="display: none;">
+                    <input type="file" id="audio-input" accept="audio/*" style="display: none;">
+                </div>
+
+                <div class="tool-section">
+                    <h3>Text</h3>
+                    <button id="add-text" class="tool-btn">
+                        <i class="fas fa-font"></i> Add Text
+                    </button>
+                    <div id="text-properties" style="display: none;">
+                        <input type="text" id="text-content" placeholder="Enter text">
+                        <input type="color" id="text-color" value="#ffffff">
+                        <input type="range" id="text-size" min="10" max="100" value="24">
+                        <select id="text-font">
+                            <option value="Arial">Arial</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <h3>Audio Mixer</h3>
+                    <div id="audio-controls" style="display: none;">
+                        <label>Volume</label>
+                        <input type="range" id="audio-volume" min="0" max="100" value="50">
+                        <label>Fade In</label>
+                        <input type="range" id="audio-fade-in" min="0" max="10" value="0">
+                        <label>Fade Out</label>
+                        <input type="range" id="audio-fade-out" min="0" max="10" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Panel - Preview -->
+            <div class="center-panel">
+                <div class="video-preview-container">
+                    <video id="video-preview" controls style="display: none;"></video>
+                    <canvas id="video-canvas"></canvas>
+                    <div id="text-overlays-container"></div>
+                    <div id="drop-zone" class="drop-zone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & Drop Video File Here</p>
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <button id="play-btn" class="timeline-control"><i class="fas fa-play"></i></button>
+                        <span id="time-display">00:00 / 00:00</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="video-track">
+                            <div class="video-clip" id="video-clip"></div>
+                        </div>
+                        <div class="audio-track">
+                            <div class="audio-clip" id="audio-clip" style="display: none;"></div>
+                        </div>
+                        <div class="playhead" id="playhead"></div>
+                    </div>
+                    <div class="timeline-controls">
+                        <input type="range" id="trim-start" min="0" max="100" value="0">
+                        <input type="range" id="trim-end" min="0" max="100" value="100">
+                        <button id="split-btn" class="timeline-control"><i class="fas fa-cut"></i> Split</button>
+                        <button id="delete-btn" class="timeline-control"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Properties -->
+            <div class="right-panel">
+                <div class="property-section">
+                    <h3>Video Properties</h3>
+                    <div id="video-properties">
+                        <p>No video loaded</p>
+                    </div>
+                </div>
+                <div class="property-section">
+                    <h3>Selected Element</h3>
+                    <div id="element-properties">
+                        <p>No element selected</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Modal -->
+        <div id="export-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Export Video</h2>
+                <div class="export-options">
+                    <label>Resolution</label>
+                    <select id="export-resolution">
+                        <option value="480">480p</option>
+                        <option value="720" selected>720p</option>
+                        <option value="1080">1080p</option>
+                    </select>
+                    <label>Format</label>
+                    <select id="export-format">
+                        <option value="mp4" selected>MP4</option>
+                        <option value="webm">WebM</option>
+                        <option value="gif">GIF</option>
+                    </select>
+                    <label>Quality</label>
+                    <input type="range" id="export-quality" min="1" max="10" value="7">
+                </div>
+                <button id="start-export" class="btn-primary">Start Export</button>
+                <div id="export-progress" class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div id="export-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load FFmpeg -->
+    <script src="assets/ffmpeg-core.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
